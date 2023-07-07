@@ -1,4 +1,5 @@
 'use strict'
+
 module.exports = function Perceptron(size = 3, options = {}) {
   /**
    * @param {number} size 
