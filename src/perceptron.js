@@ -26,7 +26,11 @@ module.exports = function Perceptron(size = 3, options = {}) {
     return _activation(sum);
   }
 
-  function train(inputs = [], target) {
+  function train(inputs, target) {
+    /**
+     * @param {number[]} inputs
+     * @param {number} target     1 or -1.
+     */
     const prediction = this.predict(inputs);
     const error = target - prediction;
     this.weights.forEach((w, i) => {
@@ -35,6 +39,10 @@ module.exports = function Perceptron(size = 3, options = {}) {
   }
 
   function _initWeights(size, initialWeights) {
+    /**
+     * @param {number} size
+     * @param {number[]} [initialWeights]
+     */
     if (initialWeights && !Array.isArray(initialWeights)) 
       throw new Error("Invalid param: initialWeights - must be an array.");
     if (initialWeights && initialWeights.length !== size)
@@ -45,6 +53,9 @@ module.exports = function Perceptron(size = 3, options = {}) {
   }
 
   function _initLearningRate(rate) {
+    /**
+     * @param {number} [rate]
+     */
     const DEFAULT_RATE = .1;
     if (rate) {
       if (rate < 0 || rate > 1)
@@ -54,6 +65,9 @@ module.exports = function Perceptron(size = 3, options = {}) {
   }
 
   function _activation(input) {
+    /**
+     * @param {number} input
+     */
     return input > 0? 1 : -1;
   }
 
