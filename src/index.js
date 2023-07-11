@@ -14,6 +14,9 @@ rl.on('line', (input) => {
   const [ command, ...args ] = x;
 
   switch(command) {
+    case 'exit': 
+      process.exit();
+      break;
     case 'create-p':
       createPerceptron(args);
       break;
@@ -186,7 +189,7 @@ const brain = new NeuralNetwork({
   outputs: 1
 })
 const inputs = [ 1, 0 ];
-const output = brain.feedForward(inputs);
+const output = brain.predict(inputs);
 console.log("output", output);
 
 

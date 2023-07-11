@@ -37,9 +37,10 @@ module.exports = function NueralNetwork(options) {
       fill: "random"
     })]
   ])
-  this.feedForward = feedForward;
+  this.predict = predict;
+  this.train = train;
 
-  function feedForward(inputs = []) {
+  function predict(inputs = []) {
     /**
      * @param {number[]} inputs
      * @return {number[]}
@@ -55,7 +56,11 @@ module.exports = function NueralNetwork(options) {
     output.add(this.biases.get(1));
     output.map(this.activationFn);
     return output.data.flat();
- }
+  }
+
+  function train(inputs = [], target) {
+  
+  } 
 
   function _arrToMatrix(arr) {
     const matrix = new Math.Matrix({
@@ -68,5 +73,6 @@ module.exports = function NueralNetwork(options) {
     }
     return matrix;
   }
+
 }
 
