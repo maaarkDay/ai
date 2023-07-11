@@ -2,6 +2,7 @@ const readline = require('readline');
 const Perceptron = require('./perceptron.js');
 const { dataSet_2_100 } = require('./trainingData.js');
 const Math = require('./math/math.js')
+const NeuralNetwork = require('./neuralNetwork.js')
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -144,7 +145,6 @@ function multiply(data=[]) {
   }
 }
 
-
 function product (data = []) {
   // Matrix
   // Example command: product-matrix 1 2
@@ -178,3 +178,15 @@ function map(data = []) {
   const updatedMatrix = matrix.map(testFn);
   return console.table(updatedMatrix.data);
 }
+
+// Neural Network
+const brain = new NeuralNetwork({
+  inputs: 2,
+  hidden: 2,
+  outputs: 1
+})
+const inputs = [ 1, 0 ];
+const output = brain.feedForward(inputs);
+console.log("output", output);
+
+

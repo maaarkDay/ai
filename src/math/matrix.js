@@ -131,7 +131,7 @@ module.exports = function Matrix(options) {
         if (fill && fill === "random") {
           const column = new Array(columns);
           for (let idx = 0; idx < columns; idx++) {
-            const randomNumber = Math.floor(Math.random() * 10);
+            const randomNumber = Math.random()*2-1;
             column[idx] = randomNumber;
             result[i] = column;
           }
