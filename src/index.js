@@ -37,6 +37,9 @@ rl.on('line', (input) => {
     case 'transpose-matrix':
       transpose(args);
       break;
+    case 'map-matrix':
+      map(args);
+      break;
     default:
       console.log('Unknown command!');
       break;
@@ -95,8 +98,8 @@ function add(data=[]) {
   // 2 is the number to add to all elements in matrix
   if (args.length === 1) {
     const scalar = Number(args[0]);
-    matrix.add(scalar);
-    return console.table(matrices.get(id).data);
+    const updatedMatrix = matrix.add(scalar);
+    return console.table(updatedMatrix.data);
   } 
   // Matrix 
   // Example command: add-matrix 1 2 x
@@ -118,14 +121,29 @@ function multiply(data=[]) {
   // Example command: multiply-matrix 1 2
   // 1 is the id of the matrix
   // 2 is the id of the second matrix
-  const [ id, id2 ] = data;
-  const matrix = matrices.get(id);
-  const matrix_2 = matrices.get(id2);
-  if (!matrix) console.log(`Missing param: matrix with id ${id}.`);
-  if (!matrix_2) console.log(`Missing param: matrix with id ${id2}.`);
-  matrix.multiply(matrix_2);
-  return console.table(matrices.get(id).data);
+  // Example command: multiply-matrix 1 2 scalar
+  // 1 is the id of the matrix
+  // 2 is the scalar
+  // scalar is the flag
+  if (data.length === 2) {
+    const [ id, id2 ] = data;
+    const matrix = matrices.get(id);
+    const matrix_2 = matrices.get(id2);
+    if (!matrix) console.log(`Missing param: matrix with id ${id}.`);
+    if (!matrix_2) console.log(`Missing param: matrix with id ${id2}.`);
+    const updatedMatrix = matrix.multiply(matrix_2);
+    return console.table(updatedMatrix.data);
+  } 
+  if (data.length === 3) {
+    const [ id, scalar, flag ] = data;
+    if (flag === "scalar") {
+      const matrix = matrices.get(id);
+      const updatedMatrix = matrix.multiply(Number(scalar));
+      return console.table(updatedMatrix.data);
+    }
+  }
 }
+
 
 function product (data = []) {
   // Matrix
@@ -147,4 +165,16 @@ function transpose(data = []) {
   const matrix = matrices.get(data[0]);
   const result = matrix.transpose();
   return console.table(result.data);
+}
+
+function map(data = []) {
+  // Matrix
+  // Example command: map-matrix 1
+  // 1 is the id of the matrix
+  const matrix = matrices.get(data[0]);
+  const testFn = (number) => {
+    return number * 2; 
+  }
+  const updatedMatrix = matrix.map(testFn);
+  return console.table(updatedMatrix.data);
 }

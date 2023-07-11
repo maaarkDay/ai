@@ -5,6 +5,7 @@ module.exports = function Matrix(options) {
   this.multiply = multiply;
   this.product = product;
   this.transpose = transpose;
+  this.map = map;
 
   function add(n) {
     /**
@@ -33,6 +34,7 @@ module.exports = function Matrix(options) {
         }
       }
     }
+    return this;
   }
 
   function multiply(n) {
@@ -40,25 +42,26 @@ module.exports = function Matrix(options) {
      * @param {(Matrix|Number)} n
      * @return {this} 
      */
-    if (n) throw new Error("Missing param: argument.");
+    if (!n) throw new Error("Missing param: argument.");
     // Scalar
     if (typeof n === "number") {
       for (let i = 0; i < this.data.length; i++) {
         for (let j = 0; j < this.data[i].length; j++) {
-          this.data[i][j] += n.data[i][j];
+          this.data[i][j] = this.data[i][j] * n;
         }
       } 
     }
     // Element-wise
     else {
       if (this.data.length !== n.data.length) throw new Error("Matrix rows must match.");
+      if (this.data[0].length !== n.data[0].length) throw new Error("Matrix columns must match.");
       for (let i = 0; i < this.data.length; i++) {
-        if (n.data.length !== this.data[i].length) throw new Error("Matrix columns must match.");
         for (let j = 0; j < this.data[i].length; j++) {
           this.data[i][j] = this.data[i][j] * n.data[i][j];
         }
       }
     }
+    return this;
  }
 
   function product(n) {
@@ -100,6 +103,23 @@ module.exports = function Matrix(options) {
       }
     }
     return result;
+  }
+
+  function map(fn) {
+    /**
+     * Runs a function on every element in matrix.
+     *
+     * @param {function} fn
+     * @return {this}
+     */
+    if (typeof fn !== "function") 
+        throw new Error("Invalid param: Must be a function.");
+    for (let i = 0; i < this.data.length; i++) {
+      for (let j = 0; j < this.data[i].length; j++) {
+        this.data[i][j] = fn(this.data[i][j]);
+      }
+    }
+    return this;
   }
 
   function _init(options) {
