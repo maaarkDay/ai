@@ -2,6 +2,7 @@
 module.exports = function Matrix(options) {
   this.data = _init(options);
   this.add = add;
+  this.subtract = subtract;
   this.multiply = multiply;
   this.product = product;
   this.transpose = transpose;
@@ -37,6 +38,36 @@ module.exports = function Matrix(options) {
     return this;
   }
 
+  function subtract(n) {
+    /**
+     * @param {(Matrix|Number)} n
+     * @return {this}
+     */
+    // Scalar
+    if (typeof n === "number") {
+      for (let i = 0; i < this.data.length; i++) {
+        for (let j = 0; j < this.data[i].length; j++) {
+          this.data[i][j] -= n;
+        }
+      }
+    } 
+    // Element-wise
+    if (n instanceof Matrix) {
+      const { data } = n;
+      if (data.length !== this.data.length) throw new Error("Matrix rows must match.");
+      data.forEach((row, i) => {
+        if (row.length !== this.data[i].length)  
+          throw new Error("Matrix columns must match.");
+      })
+      for (let i = 0; i < this.data.length; i++) {
+        for (let j = 0; j < this.data[i].length; j++) {
+          this.data[i][j] -= data[i][j];
+        }
+      }
+    }
+    return this;
+  }
+
   function multiply(n) {
     /**
      * @param {(Matrix|Number)} n
@@ -62,7 +93,7 @@ module.exports = function Matrix(options) {
       }
     }
     return this;
- }
+  }
 
   function product(n) {
     /**

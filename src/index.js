@@ -2,7 +2,7 @@ const readline = require('readline');
 const Perceptron = require('./perceptron.js');
 const { dataSet_2_100 } = require('./trainingData.js');
 const Math = require('./math/math.js')
-const NeuralNetwork = require('./neuralNetwork.js')
+const MultiLayerPerceptron = require('./multiLayerPerceptron.js')
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -32,6 +32,9 @@ rl.on('line', (input) => {
     case 'add-matrix':
       add(args);
       break;
+    case 'subtract-matrix':
+      subtract(args);
+      break;
     case 'multiply-matrix':
       multiply(args);
       break;
@@ -43,6 +46,9 @@ rl.on('line', (input) => {
       break;
     case 'map-matrix':
       map(args);
+      break;
+    case 'get-matrix':
+      get(args);
       break;
     default:
       console.log('Unknown command!');
@@ -93,6 +99,10 @@ function createMatrix(data = []) {
   console.table(matrix.data);
 }
 
+function get(data = []) {
+  return console.table(matrices.get(data[0])?.data || "none");
+}
+
 function add(data=[]) {
   const [ id, ...args ] = data;
   const matrix = matrices.get(id);
@@ -116,6 +126,33 @@ function add(data=[]) {
     const matrix_2 = matrices.get(id2);
     if (!matrix_2) console.log(`Missing param: matrix with id ${id2}.`);
     matrix.add(matrix_2);
+    return console.table(matrices.get(id).data);
+  }
+}
+
+function subtract(data=[]) {
+  const [ id, ...args ] = data;
+  const matrix = matrices.get(id);
+  // Scalar
+  // Example command: subtract-matrix 1 2 
+  // 1 is the id of the matrix
+  // 2 is the number to subtract from  all elements in matrix
+  if (args.length === 1) {
+    const scalar = Number(args[0]);
+    const updatedMatrix = matrix.subtract(scalar);
+    return console.table(updatedMatrix.data);
+  } 
+  // Matrix 
+  // Example command: subtract-matrix 1 2 x
+  // 1 is the id of the matrix
+  // 2 is the id of the second matrix
+  // x can me anything, its just a flag to let this function know
+  // that this is matrix addition instead of scalar addition.
+  else {
+    const [ id2, flag ] = args;
+    const matrix_2 = matrices.get(id2);
+    if (!matrix_2) console.log(`Missing param: matrix with id ${id2}.`);
+    matrix.subtract(matrix_2);
     return console.table(matrices.get(id).data);
   }
 }
@@ -183,7 +220,7 @@ function map(data = []) {
 }
 
 // Neural Network
-const brain = new NeuralNetwork({
+const brain = new MultiLayerPerceptron({
   inputs: 2,
   hidden: 2,
   outputs: 1

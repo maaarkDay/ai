@@ -41,7 +41,7 @@ module.exports = function MultiLayerPerceptron(options) {
   this.train = train;
 
   function predict(inputs = []) {
-    console.log("predict");
+    console.log("🍆");
     /**
      * @param {number[]} inputs
      * @return {number[]}
