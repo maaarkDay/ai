@@ -232,7 +232,7 @@ console.log("prediction test...");
 console.log("output", output);
 
 console.log("\ntraining test...");
-//brain.train(inputs, targets);
+brain.train(inputs, targets);
 
 
 

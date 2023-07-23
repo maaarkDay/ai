@@ -155,7 +155,7 @@ module.exports = function Matrix(options) {
 
   function _init(options) {
     const { rows, columns, fill } = options;
-    const result = new Array(rows || 0);
+    let result = new Array(rows || 0);
     if (rows && columns) {
       for (let i = 0; i < rows; i++) {
         if (fill !== undefined && typeof fill === "number") result[i] = new Array(columns).fill(fill || 0);
@@ -168,6 +168,10 @@ module.exports = function Matrix(options) {
           }
         }
       } 
+    }
+    else if (fill && Array.isArray(fill)) {
+      // Deep copy for array of arrays
+      result = JSON.parse(JSON.stringify(fill));
     }
     return result;
   }
