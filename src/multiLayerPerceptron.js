@@ -41,7 +41,6 @@ module.exports = function MultiLayerPerceptron(options) {
   this.train = train;
 
   function predict(inputs = []) {
-    console.log("🍆");
     /**
      * @param {number[]} inputs
      * @return {number[]}
@@ -49,18 +48,33 @@ module.exports = function MultiLayerPerceptron(options) {
     // Convert input to matrix
     const inputMatrix = _arrToMatrix(inputs);
     // Calculate hidden layer outputs 
-    const hiddenOutputs = this.weights.get(0).product(inputMatrix);
-    hiddenOutputs.add(this.biases.get(0));
-    hiddenOutputs.map(this.activationFn);
+    const hiddenOutputs = this.weights.get(0)
+      .product(inputMatrix)
+      .add(this.biases.get(0))
+      .map(this.activationFn);
     // Calculate output
-    const output = this.weights.get(1).product(hiddenOutputs);
-    output.add(this.biases.get(1));
-    output.map(this.activationFn);
-    return output.data.flat();
+    const outputs = this.weights.get(1)
+      .product(hiddenOutputs)
+      .add(this.biases.get(1))
+      .map(this.activationFn);
+    return outputs.data;
   }
 
-  function train(inputs = [], target) {
-  
+  function train(inputs = [], targets = []) {
+    const inputMatrix = _arrToMatrix(inputs);
+    const hiddenOutputs = this.weights.get(0).product(inputMatrix);
+    
+
+    let outputs = this.predict(inputs);
+    console.log("outputs", outputs);
+    outputs = _arrToMatrix(outputs);
+    targets = _arrToMatrix(targets);
+    targets.subtract(outputs);
+    console.log("outputs errors:", targets.data);
+    // Hidden errors
+    let transposedL2Weights = this.weights.get(1).transpose();
+    let hiddenErrors = transposedL2Weights.product(targets);
+    console.log("hidden errors:", hiddenErrors.data);
   } 
 
   function _arrToMatrix(arr) {

@@ -223,10 +223,16 @@ function map(data = []) {
 const brain = new MultiLayerPerceptron({
   inputs: 2,
   hidden: 2,
-  outputs: 1
+  outputs: 2
 })
 const inputs = [ 1, 0 ];
 const output = brain.predict(inputs);
+const targets = [ 1, 0 ];
+console.log("prediction test...");
 console.log("output", output);
+
+console.log("\ntraining test...");
+//brain.train(inputs, targets);
+
 
 

@@ -120,7 +120,7 @@ module.exports = function Matrix(options) {
   }
 
   function transpose() {
-    /** 
+    /**g
      * @return {Matrix} New Matrix.
      */
     const result = new Matrix ({
