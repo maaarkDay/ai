@@ -98,7 +98,7 @@ module.exports = function Matrix(options) {
   function product(n) {
     /**
     * @param {Matrix} n
-    * @return {Matrix}
+    * @return {Matrix}  // New Matrix.
     */
     if (!n instanceof Matrix) throw new Error("Invalid param: arg must be a Matrix.");
     if (this.data[0].length !== n.data.length) throw new Error("Invalid param: Matrix cols must match arg Matrix rows.");

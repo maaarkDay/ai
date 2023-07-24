@@ -73,7 +73,7 @@ module.exports = function MultiLayerPerceptron(options) {
       .product(hiddenOutputs)
       .add(this.biases.get(1))
       .map(this.activationFn);
-    
+    /* Backpropogation *****************************************************/
     // Output errors
     targetsMatrix.subtract(outputs);
     // Gradients
@@ -88,7 +88,7 @@ module.exports = function MultiLayerPerceptron(options) {
     // Update layer 2 weights and bias
     this.weights.get(1).add(layer2WeightsDeltas);
     this.biases.get(1).add(gradients);
-
+    /***********************************************************************/
     // Hidden errors
     const transposedL2Weights = this.weights.get(1).transpose();
     const hiddenErrors = transposedL2Weights.product(targetsMatrix);
