@@ -1,7 +1,7 @@
 const readline = require('readline');
 const Perceptron = require('./perceptron.js');
-const { dataSet_2_100 } = require('./trainingData.js');
-const Math = require('./math/math.js')
+const { dataSet_2_100, xOr } = require('./trainingData.js');
+const ML_Math = require('./math/math.js')
 const MultiLayerPerceptron = require('./multiLayerPerceptron.js')
 
 const rl = readline.createInterface({
@@ -94,7 +94,7 @@ function createMatrix(data = []) {
       ? options.fill = fill
       : options.fill = Number(fill);
   }
-  matrix = new Math.Matrix(options);
+  matrix = new ML_Math.Matrix(options);
   matrices.set(id, matrix);
   console.table(matrix.data);
 }
@@ -223,16 +223,36 @@ function map(data = []) {
 const brain = new MultiLayerPerceptron({
   inputs: 2,
   hidden: 2,
-  outputs: 2
+  outputs: 1
 })
-const inputs = [ 1, 0 ];
-const output = brain.predict(inputs);
-const targets = [ 1, 0 ];
-console.log("prediction test...");
-console.log("output", output);
 
-console.log("\ntraining test...");
-brain.train(inputs, targets);
+console.log("\nXOR training test...");
+for (let i = 0; i < 50000; i++) {
+  const randomNum = Math.floor(Math.random() * 4);
+  const { inputs, targets } = xOr[randomNum];
+  brain.train(inputs, targets);
+}
+
+for (data of xOr) {
+  console.log(
+    brain.predict(data.inputs),
+    `${data.targets[0] === Math.round(brain.predict(data.inputs))
+      ? "✅"
+      : "❌"}`
+  );
+}
+
+
+//let prediction = brain.predict([0,0]);
+//console.log("prediction:", prediction);
+//prediction = brain.predict([0,1]);
+//console.log("prediction:", prediction);
+//prediction = brain.predict([1,1]);
+//console.log("prediction:", prediction);
+//prediction = brain.predict([1,1]);
+//console.log("prediction:", prediction);
+
+
 
 
 

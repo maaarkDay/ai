@@ -76,7 +76,6 @@ module.exports = function MultiLayerPerceptron(options) {
     
     // Output errors
     targetsMatrix.subtract(outputs);
-    console.log("outputs errors:", targetsMatrix.data);
     // Gradients
     const gradients = new Math.Matrix({
       fill: outputs.data
@@ -86,13 +85,13 @@ module.exports = function MultiLayerPerceptron(options) {
     // Calculate deltas
     const transposedHiddenOutputs = hiddenOutputs.transpose();
     const layer2WeightsDeltas = gradients.product(transposedHiddenOutputs);
-    // Update layer 2 weights
+    // Update layer 2 weights and bias
     this.weights.get(1).add(layer2WeightsDeltas);
+    this.biases.get(1).add(gradients);
 
     // Hidden errors
     const transposedL2Weights = this.weights.get(1).transpose();
     const hiddenErrors = transposedL2Weights.product(targetsMatrix);
-    console.log("hidden errors:", hiddenErrors.data);
     // Gradients
     const hiddenGradients = new Math.Matrix({
       fill: hiddenOutputs.data
@@ -102,8 +101,9 @@ module.exports = function MultiLayerPerceptron(options) {
     // Calculate deltas
     const transposedInputs = inputMatrix.transpose();
     const layer1WeightsDeltas = hiddenGradients.product(transposedInputs);
-    // Update layer 1 weights
+    // Update layer 1 weights and bias
     this.weights.get(0).add(layer1WeightsDeltas);
+    this.biases.get(0).add(hiddenGradients);
   } 
 
   function _arrToMatrix(arr) {
